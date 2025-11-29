@@ -276,25 +276,57 @@
     .logo-mark {
       animation: sigmaGlow 4.4s ease-in-out infinite;
     }
+    .nav {
+  display: flex;
+  gap: 22px;
+}
+
+.nav-link {
+  color: var(--muted);
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+  padding-bottom: 4px;
+  border-bottom: 1px solid transparent;
+  transition: color 0.25s ease, border-bottom-color 0.25s ease;
+}
+
+.nav-link:hover {
+  color: var(--fg);
+  border-bottom-color: var(--fg);
+}
+
+@media (max-width: 840px) {
+  .nav {
+    gap: 14px;
+  }
+  .nav-link {
+    font-size: 12px;
+  }
+}
   </style>
 </head>
 <body>
   <div class="page">
-    <header>
-      <div style="display:flex; align-items:center; gap:12px;">
-        <div class="logo-mark" aria-hidden="true">
-          <span>Σ</span>
-        </div>
-        <div>
-          <div class="tagline">Kim Dupont</div>
-          <div class="pill">Systems · Security · Strength</div>
-        </div>
-      </div>
+<header>
+  <div style="display:flex; align-items:center; gap:12px;">
+    <div class="logo-mark" aria-hidden="true">
+      <span>Σ</span>
+    </div>
+    <div>
+      <div class="tagline">Kim Dupont</div>
+      <div class="pill">Systems · Security · Strength</div>
+    </div>
+  </div>
 
-      <div class="pill">
-        Operating quietly · Building loudly
-      </div>
-    </header>
+  <nav class="nav">
+    <a href="/" class="nav-link">Home</a>
+    <a href="/about" class="nav-link">About</a>
+    <a href="/work" class="nav-link">Work</a>
+    <a href="/contact" class="nav-link">Contact</a>
+  </nav>
+</header>
 
     <main>
       <!-- LEFT: HERO -->
