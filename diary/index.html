@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diary — Kim Dupont</title>
+
+  <style>
+    :root {
+      --bg: #050505;
+      --fg: #f5f5f5;
+      --muted: #888;
+      --border-subtle: #1a1a1a;
+      --accent: #ffffff;
+    }
+
+    body {
+      margin: 0;
+      padding: 40px 22px;
+      background: #050505;
+      color: var(--fg);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .title {
+      font-size: 34px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .entry {
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 20px;
+      line-height: 1.55;
+      font-size: 17px;
+      color: var(--fg);
+    }
+
+    .date {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    a.back {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      border: 1px solid var(--border-subtle);
+      padding: 6px 12px;
+      border-radius: 10px;
+    }
+
+    a.back:hover {
+      color: var(--fg);
+      border-color: var(--fg);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="back">← Home</a>
+
+    <div>
+      <h1 class="title">Diary</h1>
+      <div class="subtitle">Unfiltered thoughts · Discipline · Truth</div>
+    </div>
+
+    <!-- Example entry -->
+    <div class="entry">
+      <div class="date">Entry 01 — This is only the beginning</div>
+      <p>
+        Today I decided to start writing. Not to impress anyone. Not for approval.
+        Just to put my thoughts somewhere real. If people read it, fine. If not, fine.
+      </p>
+    </div>
+
+  </div>
+</body>
+</html>
