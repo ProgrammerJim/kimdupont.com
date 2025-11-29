@@ -205,37 +205,60 @@
       color: var(--muted);
     }
 
-    .contact {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 10px;
-    }
+.contact {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;              /* more space between buttons */
+  margin-top: 28px;       /* more separation from text above */
+}
 
-    .contact-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--muted);
-    }
+.contact-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+}
 
-    .contact-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      padding: 7px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border-subtle);
-      text-decoration: none;
-      color: var(--fg);
-      background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01));
-    }
+/* upgraded button style */
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;                 /* center the text inside the pill */
+  gap: 10px;
+  font-size: 14px;
+  padding: 12px 20px;                      /* bigger click area */
+  border-radius: 14px;
+  border: 1px solid var(--accent);         /* stronger border */
+  text-decoration: none;
+  color: var(--fg);
+  background: linear-gradient(
+    120deg,
+    rgba(255,255,255,0.12),
+    rgba(255,255,255,0.02)
+  );
+  box-shadow: 0 0 0 rgba(0,0,0,0.6);
+  transition:
+    background 0.25s ease,
+    transform 0.2s ease,
+    box-shadow 0.3s ease,
+    border-color 0.25s ease;
+}
 
-    .contact-link span.arrow {
-      font-size: 14px;
-      transform: translateY(1px);
-    }
+.contact-link:hover {
+  background: linear-gradient(
+    120deg,
+    rgba(255,255,255,0.22),
+    rgba(255,255,255,0.06)
+  );
+  transform: translateY(-1px);
+  box-shadow: 0 0 18px rgba(255,255,255,0.18);
+  border-color: var(--fg);
+}
+
+.contact-link span.arrow {
+  font-size: 14px;
+  transform: translateY(1px);
+}
 
     footer {
       margin-top: 4px;
@@ -324,6 +347,7 @@
     <a href="/" class="nav-link">Home</a>
     <a href="/about" class="nav-link">About</a>
     <a href="/work" class="nav-link">Work</a>
+    <hr style="border:none; border-top:1px solid var(--border-subtle); margin:28px 0 18px;">
     <a href="/contact" class="nav-link">Contact</a>
   </nav>
 </header>
