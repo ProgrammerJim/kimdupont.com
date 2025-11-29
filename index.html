@@ -1,36 +1,382 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2487.6">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kim Dupont</title>
+
+  <meta name="description" content="Personal site of Kim Dupont – email security, systems thinking, strength training." />
+
+  <style>
+    :root {
+      --bg: #050505;
+      --bg-alt: #0e0e0e;
+      --fg: #f5f5f5;
+      --muted: #888888;
+      --accent: #ffffff;
+      --border-subtle: #1a1a1a;
+      --max-width: 960px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #151515 0, #050505 48%, #000 100%);
+      color: var(--fg);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: var(--max-width);
+      border-radius: 24px;
+      border: 1px solid var(--border-subtle);
+      background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      backdrop-filter: blur(12px);
+      padding: 24px 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 16px;
+    }
+
+    .logo-mark {
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      letter-spacing: 1px;
+      background: radial-gradient(circle at 30% 0%, #333 0, #111 55%, #000 100%);
+      box-shadow: 0 0 30px rgba(0,0,0,0.8);
+    }
+
+    .logo-mark span {
+      transform: translateY(-1px);
+    }
+
+    .tagline {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .pill {
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      padding: 4px 11px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.3fr);
+      gap: 28px;
+      align-items: start;
+    }
+
+    @media (max-width: 840px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .hero-title {
+      font-size: clamp(30px, 5vw, 40px);
+      line-height: 1.1;
+      margin: 0 0 10px;
+    }
+
+    .hero-title span.dim {
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .hero-sub {
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 420px;
+      line-height: 1.5;
+    }
+
+    .hero-sub strong {
+      color: var(--fg);
+      font-weight: 500;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .hero-meta span {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(255,255,255,0.01);
+    }
+
+    .section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .cards {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card {
+      border-radius: 16px;
+      border: 1px solid var(--border-subtle);
+      background: radial-gradient(circle at top left, rgba(255,255,255,0.06), rgba(255,255,255,0.01));
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .card-body {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .card-badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .badge {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      color: var(--muted);
+    }
+
+    .contact {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .contact-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      text-decoration: none;
+      color: var(--fg);
+      background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01));
+    }
+
+    .contact-link span.arrow {
+      font-size: 14px;
+      transform: translateY(1px);
+    }
+
+    footer {
+      margin-top: 4px;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    footer a {
+      color: var(--muted);
+      text-decoration: none;
+      border-bottom: 1px dotted rgba(255,255,255,0.15);
+    }
+
+    footer a:hover {
+      color: var(--accent);
+      border-bottom-color: rgba(255,255,255,0.5);
+    }
+
+    .dot-sep::before {
+      content: "•";
+      margin: 0 6px;
+      opacity: 0.45;
+    }
+
+    /* subtle “sigma” pulse on logo */
+    @keyframes sigmaGlow {
+      0% { box-shadow: 0 0 0 rgba(255,255,255,0.08); }
+      50% { box-shadow: 0 0 32px rgba(255,255,255,0.18); }
+      100% { box-shadow: 0 0 0 rgba(255,255,255,0.08); }
+    }
+
+    .logo-mark {
+      animation: sigmaGlow 4.4s ease-in-out infinite;
+    }
   </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Kim Dupont&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>body {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background-color: #000;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: #fff;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-family: Arial, sans-serif;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding-top: 80px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;h1&gt;KimDupont.com&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;p&gt;Website under construction — stay tuned.&lt;/p&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+  <div class="page">
+    <header>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="logo-mark" aria-hidden="true">
+          <span>Σ</span>
+        </div>
+        <div>
+          <div class="tagline">Kim Dupont</div>
+          <div class="pill">Systems · Security · Strength</div>
+        </div>
+      </div>
+
+      <div class="pill">
+        Operating quietly · Building loudly
+      </div>
+    </header>
+
+    <main>
+      <!-- LEFT: HERO -->
+      <section>
+        <h1 class="hero-title">
+          Intentional life on <span class="dim">hard mode.</span>
+        </h1>
+        <p class="hero-sub">
+          Email security engineer by trade. Strength training and discipline by choice.
+          I build resilient systems – technical and human – and remove noise wherever I can.
+        </p>
+
+        <div class="hero-meta">
+          <span>EMAIL SECURITY</span>
+          <span>ABUSE & THREAT MITIGATION</span>
+          <span>POWERLIFTING & BODYBUILDING</span>
+        </div>
+
+        <div class="contact">
+          <div class="contact-label">Contact</div>
+          <a class="contact-link" href="mailto:hello@kimdupont.com">
+            <span>hello@kimdupont.com</span>
+            <span class="arrow">↗</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- RIGHT: STACK / PRINCIPLES -->
+      <section>
+        <div class="section-block">
+          <div class="section-title">What I Do</div>
+          <div class="cards">
+            <article class="card">
+              <div class="card-title">Email Security & Infrastructure</div>
+              <div class="card-body">
+                Design, harden and debug mail flows. SPF, DKIM, DMARC, gateways, and the weird edge cases
+                most people never see until it breaks in production.
+              </div>
+              <div class="card-badge-row">
+                <span class="badge">Abuse / Threat Surface</span>
+                <span class="badge">O365 · Mimecast · Barracuda</span>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card-title">Discipline & Strength</div>
+              <div class="card-body">
+                Structured training. Progressive overload. Long-term thinking. The same way you secure systems:
+                tight feedback loops, no shortcuts, no excuses.
+              </div>
+              <div class="card-badge-row">
+                <span class="badge">Powerlifting</span>
+                <span class="badge">Body Recomposition</span>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card-title">Quiet execution</div>
+              <div class="card-body">
+                No personal brand circus. Just work, iteration and results. If you build with intent and patience,
+                the signal eventually cuts through the noise.
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div>
+        © <span id="year"></span> Kim Dupont
+      </div>
+      <div>
+        <span>Based in Belgium</span>
+        <span class="dot-sep">Web by hand, not by template</span>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // keep year current
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
