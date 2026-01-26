@@ -43,16 +43,6 @@ function safeSlug(slug) {
     .replace(/^-|-$/g, "");
 }
 
-function propText(page, name) {
-  const p = page.properties?.[name];
-  if (!p) return "";
-  if (p.type === "title") return p.title?.[0]?.plain_text ?? "";
-  if (p.type === "rich_text") return p.rich_text?.[0]?.plain_text ?? "";
-  if (p.type === "date") return p.date?.start ?? "";
-  if (p.type === "checkbox") return !!p.checkbox;
-  return "";
-}
-
 function pageHtml({ title, body }) {
   return `<!doctype html>
 <html lang="en">
@@ -80,22 +70,91 @@ ${body}
 </html>`;
 }
 
+// ---- property helpers (work off the actual database schema) ----
+function listProps(schema) {
+  return Object.entries(schema).map(([name, def]) => ({ name, type: def.type }));
+}
+
+function findPropName(schema, { type, names }) {
+  // Try exact matches first (case-insensitive)
+  const entries = Object.entries(schema);
+  const byType = entries.filter(([, def]) => def.type === type);
+
+  const lowered = new Map(entries.map(([n, d]) => [n.toLowerCase(), { name: n, def: d }]));
+
+  for (const wanted of names) {
+    const hit = lowered.get(wanted.toLowerCase());
+    if (hit && hit.def.type === type) return hit.name;
+  }
+
+  // Fallback: first property of that type
+  if (byType.length) return byType[0][0];
+  return null;
+}
+
+function getProp(page, propName) {
+  return page.properties?.[propName];
+}
+
+function readTitle(page, propName) {
+  const p = getProp(page, propName);
+  return p?.type === "title" ? (p.title?.[0]?.plain_text ?? "") : "";
+}
+
+function readText(page, propName) {
+  const p = getProp(page, propName);
+  if (!p) return "";
+  if (p.type === "rich_text") return p.rich_text?.[0]?.plain_text ?? "";
+  if (p.type === "title") return p.title?.[0]?.plain_text ?? "";
+  return "";
+}
+
+function readDate(page, propName) {
+  const p = getProp(page, propName);
+  return p?.type === "date" ? (p.date?.start ?? "") : "";
+}
+
+function readCheckbox(page, propName) {
+  const p = getProp(page, propName);
+  return p?.type === "checkbox" ? !!p.checkbox : false;
+}
+
 async function main() {
-  const res = await notion.databases.query({
+  // Read DB schema so we use the exact property names Notion has
+  const db = await notion.databases.retrieve({ database_id: DB_ID });
+
+  console.log("Notion DB title:", db.title?.[0]?.plain_text ?? "(no title)");
+  console.log("DB properties:", listProps(db.properties));
+
+  const titleProp = findPropName(db.properties, { type: "title", names: ["Title", "Name"] });
+  const dateProp = findPropName(db.properties, { type: "date", names: ["Date", "Day", "Datum"] });
+  const slugProp = findPropName(db.properties, { type: "rich_text", names: ["Slug", "URL", "Path"] });
+  const pubProp = findPropName(db.properties, { type: "checkbox", names: ["Published", "Public", "Live"] });
+
+  if (!titleProp) throw new Error("No Title/Name property found (type=title).");
+  if (!slugProp) throw new Error("No Slug property found (type=rich_text). Create a Text column like 'Slug'.");
+  if (!pubProp) throw new Error("No Published property found (type=checkbox). Create a Checkbox column like 'Published'.");
+
+  console.log("Using properties:", { titleProp, dateProp, slugProp, pubProp });
+
+  const query = {
     database_id: DB_ID,
-    filter: { property: "Published", checkbox: { equals: true } }
-  });
+    filter: { property: pubProp, checkbox: { equals: true } }
+  };
+
+  // Sort only if we found a real date property
+  if (dateProp) {
+    query.sorts = [{ property: dateProp, direction: "descending" }];
+  }
+
+  const res = await notion.databases.query(query);
 
   const entries = [];
 
   for (const page of res.results) {
-    const title = propText(page, "Title") || "Untitled";
-
-    // NOTE: Your Notion date column is NOT called "Date" (per earlier error),
-    // so this will likely be empty until you tell me the exact column header name.
-    const date = propText(page, "Date") || "";
-
-    const slugRaw = propText(page, "Slug") || date || page.id;
+    const title = readTitle(page, titleProp) || "Untitled";
+    const date = dateProp ? readDate(page, dateProp) : "";
+    const slugRaw = readText(page, slugProp) || date || page.id;
     const slug = safeSlug(slugRaw);
     if (!slug) continue;
 
@@ -114,24 +173,13 @@ async function main() {
 `;
 
     const outDir = path.join(DIARY_DIR, slug);
-    writeFile(
-      path.join(outDir, "index.html"),
-      pageHtml({
-        title: `${title} — Diary`,
-        body: postBody
-      })
-    );
+    writeFile(path.join(outDir, "index.html"), pageHtml({ title: `${title} — Diary`, body: postBody }));
 
     entries.push({ title, date, slug });
   }
 
   const list = entries
-    .map(
-      (e) =>
-        `<li><a href="/diary/${escapeHtml(e.slug)}/">${escapeHtml(e.date)} — ${escapeHtml(
-          e.title
-        )}</a></li>`
-    )
+    .map((e) => `<li><a href="/diary/${escapeHtml(e.slug)}/">${escapeHtml(e.date)} — ${escapeHtml(e.title)}</a></li>`)
     .join("\n");
 
   const indexBody = `
@@ -144,13 +192,7 @@ ${list || "<li>No published entries yet.</li>"}
 </ul>
 `;
 
-  writeFile(
-    path.join(DIARY_DIR, "index.html"),
-    pageHtml({
-      title: "Diary",
-      body: indexBody
-    })
-  );
+  writeFile(path.join(DIARY_DIR, "index.html"), pageHtml({ title: "Diary", body: indexBody }));
 
   console.log(`Built ${entries.length} diary entries.`);
 }
