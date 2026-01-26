@@ -80,12 +80,10 @@ ${body}
 </html>`;
 }
 
-async function main() {
-  const res = await notion.databases.query({
-    database_id: DB_ID,
-    filter: { property: "Published", checkbox: { equals: true } },
-    sorts: [{ property: "Date", direction: "descending" }]
-  });
+const res = await notion.databases.query({
+  database_id: DB_ID,
+  filter: { property: "Published", checkbox: { equals: true } }
+});
 
   const entries = [];
 
