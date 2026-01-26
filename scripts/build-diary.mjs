@@ -80,16 +80,21 @@ ${body}
 </html>`;
 }
 
-const res = await notion.databases.query({
-  database_id: DB_ID,
-  filter: { property: "Published", checkbox: { equals: true } }
-});
+async function main() {
+  const res = await notion.databases.query({
+    database_id: DB_ID,
+    filter: { property: "Published", checkbox: { equals: true } }
+  });
 
   const entries = [];
 
   for (const page of res.results) {
     const title = propText(page, "Title") || "Untitled";
+
+    // NOTE: Your Notion date column is NOT called "Date" (per earlier error),
+    // so this will likely be empty until you tell me the exact column header name.
     const date = propText(page, "Date") || "";
+
     const slugRaw = propText(page, "Slug") || date || page.id;
     const slug = safeSlug(slugRaw);
     if (!slug) continue;
@@ -109,16 +114,24 @@ const res = await notion.databases.query({
 `;
 
     const outDir = path.join(DIARY_DIR, slug);
-    writeFile(path.join(outDir, "index.html"), pageHtml({
-      title: `${title} — Diary`,
-      body: postBody
-    }));
+    writeFile(
+      path.join(outDir, "index.html"),
+      pageHtml({
+        title: `${title} — Diary`,
+        body: postBody
+      })
+    );
 
     entries.push({ title, date, slug });
   }
 
   const list = entries
-    .map(e => `<li><a href="/diary/${escapeHtml(e.slug)}/">${escapeHtml(e.date)} — ${escapeHtml(e.title)}</a></li>`)
+    .map(
+      (e) =>
+        `<li><a href="/diary/${escapeHtml(e.slug)}/">${escapeHtml(e.date)} — ${escapeHtml(
+          e.title
+        )}</a></li>`
+    )
     .join("\n");
 
   const indexBody = `
@@ -131,15 +144,18 @@ ${list || "<li>No published entries yet.</li>"}
 </ul>
 `;
 
-  writeFile(path.join(DIARY_DIR, "index.html"), pageHtml({
-    title: "Diary",
-    body: indexBody
-  }));
+  writeFile(
+    path.join(DIARY_DIR, "index.html"),
+    pageHtml({
+      title: "Diary",
+      body: indexBody
+    })
+  );
 
   console.log(`Built ${entries.length} diary entries.`);
+}
 
-
-main().catch(err => {
+main().catch((err) => {
   console.error(err);
   process.exit(1);
 });
