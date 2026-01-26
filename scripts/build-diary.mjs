@@ -70,16 +70,12 @@ ${body}
 </html>`;
 }
 
-// ---- property helpers (work off the actual database schema) ----
 function listProps(schema) {
   return Object.entries(schema).map(([name, def]) => ({ name, type: def.type }));
 }
 
 function findPropName(schema, { type, names }) {
-  // Try exact matches first (case-insensitive)
   const entries = Object.entries(schema);
-  const byType = entries.filter(([, def]) => def.type === type);
-
   const lowered = new Map(entries.map(([n, d]) => [n.toLowerCase(), { name: n, def: d }]));
 
   for (const wanted of names) {
@@ -87,8 +83,10 @@ function findPropName(schema, { type, names }) {
     if (hit && hit.def.type === type) return hit.name;
   }
 
-  // Fallback: first property of that type
-  if (byType.length) return byType[0][0];
+  for (const [n, d] of entries) {
+    if (d.type === type) return n;
+  }
+
   return null;
 }
 
@@ -114,13 +112,7 @@ function readDate(page, propName) {
   return p?.type === "date" ? (p.date?.start ?? "") : "";
 }
 
-function readCheckbox(page, propName) {
-  const p = getProp(page, propName);
-  return p?.type === "checkbox" ? !!p.checkbox : false;
-}
-
 async function main() {
-  // Read DB schema so we use the exact property names Notion has
   const db = await notion.databases.retrieve({ database_id: DB_ID });
 
   console.log("Notion DB title:", db.title?.[0]?.plain_text ?? "(no title)");
@@ -142,7 +134,6 @@ async function main() {
     filter: { property: pubProp, checkbox: { equals: true } }
   };
 
-  // Sort only if we found a real date property
   if (dateProp) {
     query.sorts = [{ property: dateProp, direction: "descending" }];
   }
