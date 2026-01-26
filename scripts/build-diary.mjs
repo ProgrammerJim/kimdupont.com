@@ -137,7 +137,7 @@ ${list || "<li>No published entries yet.</li>"}
   }));
 
   console.log(`Built ${entries.length} diary entries.`);
-}
+
 
 main().catch(err => {
   console.error(err);
