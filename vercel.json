@@ -4,10 +4,15 @@
   "routes": [
     {
       "src": "^/diary(?:/.*)?$",
-      "missing": [
+      "has": [
         { "type": "header", "key": "x-vercel-ip-country", "value": "FR" }
       ],
-      "status": 403
+      "continue": true
+    },
+    {
+      "src": "^/diary(?:/.*)?$",
+      "status": 403,
+      "dest": "/diary-blocked.html"
     }
   ]
 }
