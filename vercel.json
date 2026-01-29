@@ -3,18 +3,14 @@
   "outputDirectory": ".",
   "routes": [
     {
-      "src": "^/diary(?:/.*)?$",
-      "has": [
-        { "type": "header", "key": "x-vercel-ip-country", "value": "FR" }
-      ],
-      "continue": true
+      "src": "^/diary(?:/(.*))?$",
+      "has": [{ "type": "header", "key": "x-vercel-ip-country", "value": "FR" }],
+      "dest": "/diary/$1"
     },
     {
-      "src": "^/diary(?:/.*)?$",
-      "has": [
-        { "type": "header", "key": "x-vercel-ip-country", "value": "BE" }
-      ],
-      "continue": true
+      "src": "^/diary(?:/(.*))?$",
+      "has": [{ "type": "header", "key": "x-vercel-ip-country", "value": "BE" }],
+      "dest": "/diary/$1"
     },
     {
       "src": "^/diary(?:/.*)?$",
