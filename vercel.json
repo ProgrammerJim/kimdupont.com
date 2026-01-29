@@ -11,6 +11,13 @@
     },
     {
       "src": "^/diary(?:/.*)?$",
+      "has": [
+        { "type": "header", "key": "x-vercel-ip-country", "value": "BE" }
+      ],
+      "continue": true
+    },
+    {
+      "src": "^/diary(?:/.*)?$",
       "status": 403,
       "dest": "/diary-blocked.html"
     }
