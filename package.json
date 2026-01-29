@@ -2,11 +2,11 @@
   "name": "kimdupont-site",
   "private": true,
   "type": "module",
- "scripts": {
-  "prebuild": "node scripts/notion-export.mjs && node scripts/build-diary.mjs",
-  "build": "npm run prebuild && echo \"build ok\"",
-  "build:diary": "node scripts/build-diary.mjs"
-}
+  "scripts": {
+    "prebuild": "node scripts/notion-export.mjs && node scripts/build-diary.mjs",
+    "build": "npm run prebuild && echo \"build ok\"",
+    "build:diary": "node scripts/build-diary.mjs"
+  },
   "dependencies": {
     "@notionhq/client": "^2.2.15",
     "notion-to-md": "^3.1.9",
